@@ -12,11 +12,10 @@ def lista_cruzamento(cruzamento):
 
 
 def todos_vermelho(cruzamento):
+    print("Todos vermelho")
     GPIO.output(lista_cruzamento(cruzamento), GPIO.LOW)
     GPIO.output(cruzamento['Vermelho_principal'], GPIO.HIGH)
     GPIO.output(cruzamento['Vermelho_auxiliar'], GPIO.HIGH)
-    print("Todos vermelho")
-    sleep(1)
 
 
 def principal_verde(cruzamento):
@@ -27,11 +26,10 @@ def principal_verde(cruzamento):
     
         
 def principal_amarelo(cruzamento):
+    print("Principal amarelo")
     GPIO.output(lista_cruzamento(cruzamento), GPIO.LOW)
     GPIO.output(cruzamento['Amarelo_principal'], GPIO.HIGH)
     GPIO.output(cruzamento['Vermelho_auxiliar'], GPIO.HIGH)
-    print("Principal amarelo")
-    sleep(3)
 
 
 def auxiliar_verde(cruzamento):
@@ -46,4 +44,13 @@ def auxiliar_amarelo(cruzamento):
     GPIO.output(cruzamento['Vermelho_principal'], GPIO.HIGH)
     GPIO.output(cruzamento['Amarelo_auxiliar'], GPIO.HIGH)
     print("Auxiliar amarelo")
-    sleep(3)
+
+
+def modo_noturno(cruzamento):
+    print("Modo noturno")
+    GPIO.output(lista_cruzamento(cruzamento), GPIO.LOW)
+    GPIO.output(cruzamento['Amarelo_principal'], GPIO.HIGH)
+    GPIO.output(cruzamento['Amarelo_auxiliar'], GPIO.HIGH)
+    sleep(0.25)
+    GPIO.output(lista_cruzamento(cruzamento), GPIO.LOW)
+    sleep(0.25)

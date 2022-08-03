@@ -1,76 +1,93 @@
 import RPi.GPIO as GPIO
 import sys
 from threading import Thread
-# import multiprocessing
+import socket
+import json
+import time
+import sys
 
 from entrada_saida import cruzamento_1, cruzamento_2
 from comportamento_semaforo import lista_cruzamento
 from controle_semaforo import *
+# from controle_semaforo import enviando_informacoes, verifica_modo_servidor, rotina_modo_emergencia, rotina_modo_noturno
+
+cruzamento = {}
+lista_threads = []
+
+if sys.argv[1] == 'cruzamento_1' or sys.argv[1] == 'cruzamento_3':
+    cruzamento = cruzamento_1.copy()
+elif sys.argv[1] == 'cruzamento_2' or sys.argv[1] == 'cruzamento_4':
+    cruzamento = cruzamento_2.copy()
 
 
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM) 
-GPIO.setup(lista_cruzamento(cruzamento_1), GPIO.OUT)
-GPIO.setup(lista_cruzamento(cruzamento_2), GPIO.OUT)
+GPIO.setup(lista_cruzamento(cruzamento), GPIO.OUT)
 
 
-GPIO.setup(cruzamento_1['Pedestre_principal'], GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-GPIO.setup(cruzamento_1['Pedestre_auxiliar'], GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-GPIO.setup(cruzamento_2['Pedestre_principal'], GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-GPIO.setup(cruzamento_2['Pedestre_auxiliar'], GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(cruzamento['Pedestre_principal'], GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(cruzamento['Pedestre_auxiliar'], GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
-GPIO.setup(cruzamento_1['Passagem_1'], GPIO.IN)
-GPIO.setup(cruzamento_1['Passagem_2'], GPIO.IN)
-GPIO.setup(cruzamento_2['Passagem_1'], GPIO.IN)
-GPIO.setup(cruzamento_2['Passagem_2'], GPIO.IN)
+GPIO.setup(cruzamento['Passagem_1'], GPIO.IN)
+GPIO.setup(cruzamento['Passagem_2'], GPIO.IN)
 
-GPIO.setup(cruzamento_1['Velocidade_1_A'], GPIO.IN)
-GPIO.setup(cruzamento_1['Velocidade_2_A'], GPIO.IN)
-GPIO.setup(cruzamento_2['Velocidade_1_A'], GPIO.IN)
-GPIO.setup(cruzamento_2['Velocidade_2_A'], GPIO.IN)
+GPIO.setup(cruzamento['Velocidade_1_A'], GPIO.IN)
+GPIO.setup(cruzamento['Velocidade_2_A'], GPIO.IN)
 
-GPIO.setup(cruzamento_1['Velocidade_1_B'], GPIO.IN)
-GPIO.setup(cruzamento_1['Velocidade_2_B'], GPIO.IN)
-GPIO.setup(cruzamento_2['Velocidade_1_B'], GPIO.IN)
-GPIO.setup(cruzamento_2['Velocidade_2_B'], GPIO.IN)
+GPIO.setup(cruzamento['Velocidade_1_B'], GPIO.IN)
+GPIO.setup(cruzamento['Velocidade_2_B'], GPIO.IN)
 
+
+HOST = socket.gethostname()
+HOST = socket.gethostbyname(HOST)
+HOST = '192.168.1.129'
+PORT = 10191
 
 try:
-    GPIO.add_event_detect(cruzamento_1['Pedestre_principal'], GPIO.RISING, callback=botao_pedestre_semaforo_principal, bouncetime=300)
-    GPIO.add_event_detect(cruzamento_1['Pedestre_auxiliar'], GPIO.RISING, callback=botao_pedestre_semaforo_auxiliar, bouncetime=300)
-    GPIO.add_event_detect(cruzamento_2['Pedestre_principal'], GPIO.RISING, callback=botao_pedestre_semaforo_principal, bouncetime=300)
-    GPIO.add_event_detect(cruzamento_2['Pedestre_auxiliar'], GPIO.RISING, callback=botao_pedestre_semaforo_auxiliar, bouncetime=300)
+    client_socket = socket.socket()
+    client_socket.connect((HOST, PORT))
 
-    GPIO.add_event_detect(cruzamento_1['Passagem_1'], GPIO.BOTH, callback=sensor_passagem_semaforo_auxiliar)
-    GPIO.add_event_detect(cruzamento_1['Passagem_2'], GPIO.BOTH, callback=sensor_passagem_semaforo_auxiliar)
-    GPIO.add_event_detect(cruzamento_2['Passagem_1'], GPIO.BOTH, callback=sensor_passagem_semaforo_auxiliar)
-    GPIO.add_event_detect(cruzamento_2['Passagem_2'], GPIO.BOTH, callback=sensor_passagem_semaforo_auxiliar)
+    def enviar_dados():
+        while True:
+            tempo_inicial = time.perf_counter()
+            infos_servidor_central_enviado = enviando_informacoes(tempo_inicial)
+            infos_servidor_central_enviado['Cruzamento'] = int(sys.argv[1][-1])
+            infos_servidor_central_enviado = json.dumps(infos_servidor_central_enviado).encode('utf-8')
+            sleep(15)
+            client_socket.sendall(infos_servidor_central_enviado)
 
-    GPIO.add_event_detect(cruzamento_1['Velocidade_1_A'], GPIO.BOTH, callback=sensor_parada_semaforo_principal)
-    GPIO.add_event_detect(cruzamento_1['Velocidade_2_A'], GPIO.BOTH, callback=sensor_parada_semaforo_principal)
-    GPIO.add_event_detect(cruzamento_2['Velocidade_1_A'], GPIO.BOTH, callback=sensor_parada_semaforo_principal)
-    GPIO.add_event_detect(cruzamento_2['Velocidade_2_A'], GPIO.BOTH, callback=sensor_parada_semaforo_principal)
-
-    GPIO.add_event_detect(cruzamento_1['Velocidade_1_B'], GPIO.BOTH, callback=sensor_velocidade_semaforo_principal)
-    GPIO.add_event_detect(cruzamento_1['Velocidade_2_B'], GPIO.BOTH, callback=sensor_velocidade_semaforo_principal)
-    GPIO.add_event_detect(cruzamento_2['Velocidade_1_B'], GPIO.BOTH, callback=sensor_velocidade_semaforo_principal)
-    GPIO.add_event_detect(cruzamento_2['Velocidade_2_B'], GPIO.BOTH, callback=sensor_velocidade_semaforo_principal)
+    def receber_dados():
+        while True:
+            msg = client_socket.recv(1024)
+            msg = msg.decode('utf-8')
+            print(msg)
+            verifica_modo_servidor(msg)
 
 
-    rotina_semaforo(cruzamento_1)
+    GPIO.add_event_detect(cruzamento['Pedestre_principal'], GPIO.RISING, callback=botao_pedestre_semaforo_principal, bouncetime=300)
+    GPIO.add_event_detect(cruzamento['Pedestre_auxiliar'], GPIO.RISING, callback=botao_pedestre_semaforo_auxiliar, bouncetime=300)
 
-    # thread_cruzamento_1 = Thread(target=rotina_semaforo, args=(cruzamento_1,))
-    # thread_cruzamento_1.start()
+    GPIO.add_event_detect(cruzamento['Passagem_1'], GPIO.BOTH, callback=sensor_passagem_semaforo_auxiliar)
+    GPIO.add_event_detect(cruzamento['Passagem_2'], GPIO.BOTH, callback=sensor_passagem_semaforo_auxiliar)
 
-    # thread_cruzamento_2 = Thread(target=rotina_semaforo, args=(cruzamento_2,))
-    # thread_cruzamento_2.start()
+    GPIO.add_event_detect(cruzamento['Velocidade_1_A'], GPIO.BOTH, callback=sensor_parada_semaforo_principal)
+    GPIO.add_event_detect(cruzamento['Velocidade_2_A'], GPIO.BOTH, callback=sensor_parada_semaforo_principal)
 
-    # thread_pedestre_1 = multiprocessing.Process(target=botao_pedestre_principal)
-    # thread_pedestre_1.start()
+    GPIO.add_event_detect(cruzamento['Velocidade_1_B'], GPIO.BOTH, callback=sensor_velocidade_semaforo_principal)
+    GPIO.add_event_detect(cruzamento['Velocidade_2_B'], GPIO.BOTH, callback=sensor_velocidade_semaforo_principal)
 
-    # thread_pedestre_2 = multiprocessing.Process(target=botao_pedestre_auxiliar)
-    # thread_pedestre_2.start()
+
+    thread_cruzamento = Thread(target=rotina_semaforo, args=(cruzamento,))
+    thread_cruzamento.start()
+
+    thread_envia_dados = Thread(target=enviar_dados)
+    thread_envia_dados.start()
+
+    thread_recebe_dados = Thread(target=receber_dados)
+    thread_recebe_dados.start()
+
 
 except KeyboardInterrupt:
     print("Saindo...")
+    client_socket.close()
     sys.exit()

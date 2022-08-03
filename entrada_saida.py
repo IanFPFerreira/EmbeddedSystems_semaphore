@@ -13,15 +13,15 @@ cruzamento_1 = {
     'Velocidade_1_B': 23,
     'Velocidade_2_A': 24,
     'Velocidade_2_B': 25 
-    }
+}
 
 cruzamento_2 = {
-    'Verde_principal': 2,
-    'Amarelo_principal': 3,
-    'Vermelho_principal': 11,
-    'Verde_auxiliar': 0,
-    'Amarelo_auxiliar': 5,
-    'Vermelho_auxiliar': 6,
+    'Verde_principal': 0,
+    'Amarelo_principal': 5,
+    'Vermelho_principal': 6,
+    'Verde_auxiliar': 2,
+    'Amarelo_auxiliar': 3,
+    'Vermelho_auxiliar': 11,
     'Pedestre_principal': 9,
     'Pedestre_auxiliar': 10,
     'Passagem_1': 4,
@@ -30,7 +30,17 @@ cruzamento_2 = {
     'Velocidade_1_B': 22,
     'Velocidade_2_A': 13,
     'Velocidade_2_B': 19 
-    }
+}
+
+infos_servidor_central = {
+    'Cruzamento': 0,
+    'Avanco_sinal_vermelho' : 0,
+    'Acima_velocidade_limite' : 0,
+    'Media_velocidade' : [0],
+    'Numero_veiculos' : 0,
+    'Temporizador' : 0,
+}
+
 
 botao_pedestre_principal, botao_pedestre_auxiliar = False, False
 sensor_passagem, verifica_passagem = False, False
@@ -38,3 +48,4 @@ sensor_parada, verifica_parada = False, False
 sensor_velocidade, verifica_velocidade = False, False
 tempo_inicial, tempo_final = 0.0, 0.0
 tempo_semaforo = 0
+modo_noturno_ativo = False
