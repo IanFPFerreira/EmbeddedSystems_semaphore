@@ -65,7 +65,7 @@ python3 servidor_central.py 164.41.98.26
     - No segundo terminal, na rasp, execute o comando passado os parâmetros 'cruzamento' e 'IP' de onde está rodando o servidor central:
 
 ```
-python3 main.py cruzamento_1 numero_IP_servidor_central
+python3 main.py cruzamento_1 IP_rasp_servidor_central
 ```
 Exemplo
 
@@ -77,7 +77,7 @@ python3 main.py cruzamento_1 164.41.98.26
     - No terceiro terminal, na rasp, execute o comando passado os parâmetros 'cruzamento' e 'IP' de onde está rodando o servidor central:
 
 ```
-python3 main.py cruzamento_2 numero_IP_servidor_central
+python3 main.py cruzamento_2 IP_rasp_servidor_central
 ```
 Exemplo
 
@@ -89,7 +89,7 @@ python3 main.py cruzamento_2 164.41.98.26
     - No quarto terminal, na rasp, execute o comando passado os parâmetros 'cruzamento' e 'IP' de onde está rodando o servidor central:
 
 ```
-python3 main.py cruzamento_3 numero_IP_servidor_central
+python3 main.py cruzamento_3 IP_rasp_servidor_central
 ```
 Exemplo
 
@@ -101,7 +101,7 @@ python3 main.py cruzamento_3 164.41.98.26
     - No quinto terminal, na rasp, execute o comando passado os parâmetros 'cruzamento' e 'IP' de onde está rodando o servidor central:
 
 ```
-python3 main.py cruzamento_4 numero_IP_servidor_central
+python3 main.py cruzamento_4 IP_rasp_servidor_central
 ```
 Exemplo
 

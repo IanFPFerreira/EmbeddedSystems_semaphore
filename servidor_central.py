@@ -2,6 +2,7 @@ import socket
 from _thread import *
 from threading import Thread
 import json
+import sys
 
 HOST = sys.argv[-1]
 PORT = 10191
