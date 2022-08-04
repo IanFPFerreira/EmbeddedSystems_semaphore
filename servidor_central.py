@@ -3,7 +3,7 @@ from _thread import *
 from threading import Thread
 import json
 
-HOST = '192.168.1.129'
+HOST = sys.argv[-1]
 PORT = 10191
 server_socket = socket.socket()
 
