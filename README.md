@@ -44,7 +44,7 @@ Além do que precisa-se executar os códigos da **maneira** e na **ordem** que �
 
 ## **Uso**
 
-Para executar os comandos abaixo, primeiro precisa-se clonar este repositório e copiá-lo para a rasp43 e rasp44, posteriormente acessá-las e entrar na pasta do projeto transferido.
+Para executar os comandos abaixo, primeiro precisa-se clonar este repositório e copiá-lo para a rasp43 e rasp44, posteriormente acessá-las via conexão 'ssh' e entrar na pasta do projeto transferido.
 
 - **1°**: Executar o Servidor Central
     - No primeiro terminal, na rasp43 (164.41.98.17), execute:
