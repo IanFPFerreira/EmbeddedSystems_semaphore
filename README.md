@@ -117,13 +117,18 @@ No servidor Central, quando ele é executado, uma lista de interações aparece 
 4 - Desligar modo de emergencia nos cruzamentos 3 e 4
 5 - Ligar modo noturno
 6 - Desligar modo noturno
+7 - Mostrar dados dos cruzamentos
 ```
-**IMPORTANTE** Visualize esses comandos por aqui, pois eles irão aparecer apenas uma vez no terminal.
 
 - **Modo noturno**: Liga o semáforo amarelo em todos os cruzamentos ativos
 - **Modo emergência**: Liga o semáforo verde por via principal, ou seja, nos cruzamentos 1 e 2, e/ou, nos cruzamentos 3 e 4.
 
 Feito todos os comandos acima na **ordem**, basta interagir no simulador que se encontra na página de descrição do [Trabalho 1](https://gitlab.com/fse_fga/trabalhos-2022_1/trabalho-1-2022-1)
+
+
+### Observações
+
+- Buzzer não está funcionando
 
 ## Autor
 

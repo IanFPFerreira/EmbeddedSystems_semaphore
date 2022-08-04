@@ -35,7 +35,7 @@ GPIO.setup(cruzamento['Velocidade_1_B'], GPIO.IN)
 GPIO.setup(cruzamento['Velocidade_2_B'], GPIO.IN)
 
 
-HOST = sys.argv[-1] 
+HOST = sys.argv[-1]
 PORT = 10191
 
 try:
@@ -45,7 +45,7 @@ try:
     def enviar_dados():
         while True:
             tempo_inicial = time.perf_counter()
-            sleep(10)
+            sleep(3)
             tempo_final = time.perf_counter()
             infos_servidor_central_enviado = enviando_informacoes(tempo_final - tempo_inicial)
             infos_servidor_central_enviado['Cruzamento'] = int(sys.argv[1][-1])
