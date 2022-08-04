@@ -35,7 +35,7 @@ GPIO.setup(cruzamento['Velocidade_1_B'], GPIO.IN)
 GPIO.setup(cruzamento['Velocidade_2_B'], GPIO.IN)
 
 
-HOST = '192.168.1.129' 
+HOST = sys.argv[-1] 
 PORT = 10191
 
 try:
