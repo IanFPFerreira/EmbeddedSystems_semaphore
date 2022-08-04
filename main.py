@@ -9,10 +9,8 @@ import sys
 from entrada_saida import cruzamento_1, cruzamento_2
 from comportamento_semaforo import lista_cruzamento
 from controle_semaforo import *
-# from controle_semaforo import enviando_informacoes, verifica_modo_servidor, rotina_modo_emergencia, rotina_modo_noturno
 
 cruzamento = {}
-lista_threads = []
 
 if sys.argv[1] == 'cruzamento_1' or sys.argv[1] == 'cruzamento_3':
     cruzamento = cruzamento_1.copy()
@@ -23,7 +21,6 @@ elif sys.argv[1] == 'cruzamento_2' or sys.argv[1] == 'cruzamento_4':
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM) 
 GPIO.setup(lista_cruzamento(cruzamento), GPIO.OUT)
-
 
 GPIO.setup(cruzamento['Pedestre_principal'], GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(cruzamento['Pedestre_auxiliar'], GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
@@ -38,9 +35,7 @@ GPIO.setup(cruzamento['Velocidade_1_B'], GPIO.IN)
 GPIO.setup(cruzamento['Velocidade_2_B'], GPIO.IN)
 
 
-HOST = socket.gethostname()
-HOST = socket.gethostbyname(HOST)
-HOST = '192.168.1.129'
+HOST = '192.168.1.129' 
 PORT = 10191
 
 try:
@@ -50,11 +45,13 @@ try:
     def enviar_dados():
         while True:
             tempo_inicial = time.perf_counter()
-            infos_servidor_central_enviado = enviando_informacoes(tempo_inicial)
+            sleep(10)
+            tempo_final = time.perf_counter()
+            infos_servidor_central_enviado = enviando_informacoes(tempo_final - tempo_inicial)
             infos_servidor_central_enviado['Cruzamento'] = int(sys.argv[1][-1])
             infos_servidor_central_enviado = json.dumps(infos_servidor_central_enviado).encode('utf-8')
-            sleep(15)
             client_socket.sendall(infos_servidor_central_enviado)
+
 
     def receber_dados():
         while True:

@@ -28,8 +28,8 @@ cruzamento_2 = {
     'Passagem_2': 17,
     'Velocidade_1_A': 27,
     'Velocidade_1_B': 22,
-    'Velocidade_2_A': 13,
-    'Velocidade_2_B': 19 
+    'Velocidade_2_A': 19,
+    'Velocidade_2_B': 13 
 }
 
 infos_servidor_central = {
@@ -48,4 +48,4 @@ sensor_parada, verifica_parada = False, False
 sensor_velocidade, verifica_velocidade = False, False
 tempo_inicial, tempo_final = 0.0, 0.0
 tempo_semaforo = 0
-modo_noturno_ativo = False
+modo_noturno_ativo, modo_emergencia_ativo = False, False

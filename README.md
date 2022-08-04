@@ -1,92 +1,103 @@
 # Trabalho 1 - 2022-1 - FSE
 
+Repositório focado no trabalho 1 da matéria de Fundamentos de Sistemas Embarcados feito utilizando a Raspberry Pi.
+
+## Objetivo
+
+Este trabalho tem como objetivo gerenciar o funcionamento de 4 cruzamentos, controlando a passagem de pedestres e carros, além de monitorar as infrações por velocidade acima do limite permitido e avanço de sinal vermelho. Para um entendimento completo do projeto, sua descrição e requisitos podem ser vistos [aqui](https://gitlab.com/fse_fga/trabalhos-2022_1/trabalho-1-2022-1)
 
 
-## Getting started
+## Descrição
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+Utilizando a linguagem Python (versão 3) foi criado um Servidor Distribuído, é um Servidor Central.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+#### Servidor Distribuído
 
-## Add your files
+- Controlar os semáforos
+- Controlar o acionamento de botões de passagem de pedestres
+- Monitorar o sensor de parada e passagem de carros
+- Monitorar a velocidade dos carros na via principal
+- Monitorar o número de carros na via principal
+- Monitorar as infrações cometidas
+- Enviar e receber informações do Servidor Central
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+#### Servidor Central
+
+- Gerenciar o acionamento dos cruzamentos
+- Mostrar as informações, por cruzamento, recebidas do Servidor Distribuído:
+    - Número de carros por minuto na via principal
+    - Velocidade média da via principal
+    - Número de infrações por tipo
+- Enviar informações para o Servidor Distribuído para ser acionado o modo noturno, ou o modo de emergência
+
+## Principais bibliotecas utilizadas
+
+- RPi.GPIO (Link da documentação [aqui](https://pypi.org/project/RPi.GPIO/), não vem por padrão no Python 3)
+- socket
+- threading
+
+# **Requisitos**
+
+Para executar o código necessita-se de um ambiente raspbian, por isso é necessário conectar-se as Raspberry Pi, cujas quais foram utilizadas para desenvolver este projeto.
+
+Além do que precisa-se executar os códigos da **maneira** e na **ordem** que é explicado na seção 'Uso' (abaixo).
+
+## **Uso**
+
+Para executar os comandos abaixo, primeiro precisa-se clonar este repositório e copiá-lo para a rasp43 e rasp44, posteriormente acessá-las e entrar na pasta do projeto transferido.
+
+- **1°**: Executar o Servidor Central
+    - No primeiro terminal, na rasp43 (164.41.98.17), execute:
 
 ```
-cd existing_repo
-git remote add origin https://gitlab.com/IanFPFerreira/trabalho-1-2022-1-fse.git
-git branch -M main
-git push -uf origin main
+python3 servidor_central.py
 ```
 
-## Integrate with your tools
+- **2°**: Executar o primeiro cliente do Servidor Distribuído
+    - No segundo terminal, na rasp43 (164.41.98.17), execute:
 
-- [ ] [Set up project integrations](https://gitlab.com/IanFPFerreira/trabalho-1-2022-1-fse/-/settings/integrations)
+```
+python3 main.py cruzamento_1
+```
 
-## Collaborate with your team
+- **3°**: Executar o segundo cliente do Servidor Distribuído
+    - No terceiro terminal, na rasp43 (164.41.98.17), execute:
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+```
+python3 main.py cruzamento_2
+```
 
-## Test and Deploy
+- **4°**: Executar o terceiro cliente do Servidor Distribuído
+    - No quarto terminal, na rasp44 (164.41.98.26), execute:
 
-Use the built-in continuous integration in GitLab.
+```
+python3 main.py cruzamento_3
+```
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+- **5°**: Executar o quarto cliente do Servidor Distribuído
+    - No quinto terminal, na rasp44 (164.41.98.26), execute:
 
-***
+```
+python3 main.py cruzamento_4
+```
 
-# Editing this README
+Para usar o servidor Central, qual ele é executado, uma lista de interações aparece no terminal, mostrando os comandos:
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
+```
+1 - Ligar modo de emergencia nos cruzamentos 1 e 2
+2 - Desligar modo de emergencia nos cruzamentos 1 e 2
+3 - Ligar modo de emergencia nos cruzamentos 3 e 4
+4 - Desligar modo de emergencia nos cruzamentos 3 e 4
+5 - Ligar modo noturno
+6 - Desligar modo noturno
+```
+**IMPORTANTE** Visualize esses comandos por aqui, pois eles irão aparecer apenas uma vez no terminal.
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+- **Modo noturno**: Liga o semáforo amarelo em todos os cruzamentos ativos
+- **Modo emergência**: Liga o semáforo verde por via principal, ou seja, nos cruzamentos 1 e 2, e/ou, nos cruzamentos 3 e 4.
 
-## Name
-Choose a self-explaining name for your project.
+Feito todos os comandos acima na **ordem**, basta interagir no simulador que se encontra na página de descrição do [Trabalho 1](https://gitlab.com/fse_fga/trabalhos-2022_1/trabalho-1-2022-1)
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+## Autor
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+Ian Ferreira.

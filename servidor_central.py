@@ -2,7 +2,6 @@ import socket
 from _thread import *
 from threading import Thread
 import json
-import os
 
 HOST = '192.168.1.129'
 PORT = 10191
@@ -23,22 +22,16 @@ def recebe_dados_client(conn):
         dados = json.loads(b.decode('utf-8'))
         print(conn.getpeername())
         print(f"CRUZAMENTO {dados['Cruzamento']}:")
-        print(f"Numero de carros por minuto: {dados['Numero_veiculos']} carros/min")
+        print(f"Numero de carros por minuto: {dados['Numero_veiculos']/(dados['Temporizador'] / 60)} carros/min")
         print(f"Numero de infracoes de avancos no sinal vermelho: {dados['Avanco_sinal_vermelho']}")
         print(f"Numero de infracoes de velocidade acima do limite: {dados['Acima_velocidade_limite']}")
         print(f"Velocidade media da via principal: {sum(dados['Media_velocidade'])/len(dados['Media_velocidade'])} Km/h")
+        print(f"=========================================================")
     conn.close()
 
 def envia_dados_client():
-    while True:
-        # Enviando a mensagem para o Servidor
-        print('''Opcoes:
-        1 - Ligar modo de emergencia nos cruzamentos 1 e 2
-        2 - Desligar modo de emergencia nos cruzamentos 1 e 2
-        3 - Ligar modo de emergencia nos cruzamentos 3 e 4
-        4 - Desligar modo de emergencia nos cruzamentos 3 e 4
-        5 - Ligar modo noturno
-        6 - Desligar modo noturno''')
+    
+    while True:        
         msg = input('Digite a opcao: ')
 
         if msg == '5':
@@ -48,22 +41,36 @@ def envia_dados_client():
             for addr in lista_address:
                 addr.sendall(str.encode(msg))
         elif msg == '1':
-            addr[0].sendall(str.encode(msg))
-            addr[1].sendall(str.encode(msg))
+            if len(lista_address) >= 1:
+                lista_address[0].sendall(str.encode(msg))
+            if len(lista_address) >= 2:
+                lista_address[1].sendall(str.encode(msg))
         elif msg == '2':
-            addr[0].sendall(str.encode(msg))
-            addr[1].sendall(str.encode(msg))  
-        # elif msg == '3':
-        #     addr[2].sendall(str.encode(msg))
-        #     addr[3].sendall(str.encode(msg))
-        # elif msg == '4':
-        #     addr[2].sendall(str.encode(msg))
-        #     addr[3].sendall(str.encode(msg))
+            if len(lista_address) >= 1:
+                lista_address[0].sendall(str.encode(msg))
+            if len(lista_address) >= 2:
+                lista_address[1].sendall(str.encode(msg))  
+        elif msg == '3':
+            if len(lista_address) >= 3:
+                lista_address[2].sendall(str.encode(msg))
+            if len(lista_address) >= 4:
+                lista_address[3].sendall(str.encode(msg))
+        elif msg == '4':
+            if len(lista_address) >= 3:
+                lista_address[2].sendall(str.encode(msg))
+            if len(lista_address) >= 4:
+                lista_address[3].sendall(str.encode(msg))
 
-# def 
 
 try:
     cont = 0
+    print('''Opcoes:
+        1 - Ligar modo de emergencia nos cruzamentos 1 e 2
+        2 - Desligar modo de emergencia nos cruzamentos 1 e 2
+        3 - Ligar modo de emergencia nos cruzamentos 3 e 4
+        4 - Desligar modo de emergencia nos cruzamentos 3 e 4
+        5 - Ligar modo noturno
+        6 - Desligar modo noturno''')
     while True:
         conn, addr = server_socket.accept()
         lista_address.append(conn)
@@ -74,6 +81,5 @@ try:
 
 except KeyboardInterrupt:
     server_socket.close()
-    os.remove('cruzamentos.txt')
     print('\nServidor Central encerrado')
     exit()
