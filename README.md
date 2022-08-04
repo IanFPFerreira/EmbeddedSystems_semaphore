@@ -108,7 +108,7 @@ Exemplo
 ```
 python3 main.py cruzamento_4 164.41.98.26
 ```
-Para usar o servidor Central, qual ele é executado, uma lista de interações aparece no terminal, mostrando os comandos:
+No servidor Central, quando ele é executado, uma lista de interações aparece no terminal, mostrando os comandos:
 
 ```
 1 - Ligar modo de emergencia nos cruzamentos 1 e 2
