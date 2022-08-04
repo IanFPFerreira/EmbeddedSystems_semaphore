@@ -48,6 +48,7 @@ def verifica_entradas_saidas(semaforo, cruzamento, tempo_sleep=0.5):
                 break
             if tempo_semaforo <= dict_rotinas[semaforo][1]/2 and verifica_parada:
                 verifica_parada = False
+                infos_servidor_central['Avanco_sinal_vermelho'] += 1
                 print('Multado')
         elif semaforo == 'todos_vermelho':
             if verifica_parada or verifica_passagem:
@@ -109,6 +110,7 @@ def rotina_modo_noturno(cruzamento):
         if not modo_noturno_ativo:
             rotina_semaforo(cruzamento)
         if modo_emergencia_ativo:
+            modo_noturno_ativo = False
             rotina_modo_emergencia(cruzamento)
         modo_noturno(cruzamento)
 
@@ -125,12 +127,14 @@ def rotina_modo_emergencia(cruzamento):
         if not modo_emergencia_ativo:
             rotina_semaforo(cruzamento)
         if modo_noturno_ativo:
+            modo_emergencia_ativo = False
             rotina_modo_noturno(cruzamento)
         principal_verde(cruzamento)
         if verifica_passagem:
             sensor_passagem, verifica_passagem = False, False
             infos_servidor_central['Avanco_sinal_vermelho'] += 1
             print('Multado')
+        sleep(0.5)
 
 
 def verifica_modo_servidor(modo):

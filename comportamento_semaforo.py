@@ -48,3 +48,12 @@ def modo_noturno(cruzamento):
     sleep(0.5)
     GPIO.output(lista_cruzamento(cruzamento), GPIO.LOW)
     sleep(0.5)
+
+
+def modo_emergencia(cruzamento):
+    GPIO.output(lista_cruzamento(cruzamento), GPIO.LOW)
+    GPIO.output(cruzamento['Vermelho_principal'], GPIO.HIGH)
+    GPIO.output(cruzamento['Vermelho_auxiliar'], GPIO.HIGH)
+    sleep(0.5)
+    GPIO.output(lista_cruzamento(cruzamento), GPIO.LOW)
+    sleep(0.5)

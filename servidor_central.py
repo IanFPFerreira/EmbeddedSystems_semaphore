@@ -22,7 +22,7 @@ def recebe_dados_client(conn):
         dados = json.loads(b.decode('utf-8'))
         print(conn.getpeername())
         print(f"CRUZAMENTO {dados['Cruzamento']}:")
-        print(f"Numero de carros por minuto: {dados['Numero_veiculos']/(dados['Temporizador'] / 60)} carros/min")
+        print(f"Numero de carros por minuto na via principal: {dados['Numero_veiculos']/(dados['Temporizador'] / 60)} carros/min")
         print(f"Numero de infracoes de avancos no sinal vermelho: {dados['Avanco_sinal_vermelho']}")
         print(f"Numero de infracoes de velocidade acima do limite: {dados['Acima_velocidade_limite']}")
         print(f"Velocidade media da via principal: {sum(dados['Media_velocidade'])/len(dados['Media_velocidade'])} Km/h")
