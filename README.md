@@ -40,14 +40,22 @@ Utilizando a linguagem Python (versão 3) foi criado um Servidor Distribuído, �
 
 Para executar o código necessita-se de um ambiente raspbian, por isso é necessário conectar-se as Raspberry Pi, cujas quais foram utilizadas para desenvolver este projeto.
 
-Além do que precisa-se executar os códigos da **maneira** e na **ordem** que é explicado na seção 'Uso' (abaixo).
+Além do que precisa-se executar os códigos da **maneira** que é explicado na seção 'Uso' (abaixo).
 
 ## **Uso**
 
 Para executar os comandos abaixo, primeiro precisa-se clonar este repositório e copiá-lo para as duas rasp's, posteriormente acessá-las via conexão 'ssh' e entrar na pasta do projeto transferido.
 
-Trabalhando com duas rasp's, uma delas servirá como servidor central, logo, o IP dessa Rasp terá que ser passado como parâmetro de inicialização nos scripts
+Trabalhando com duas rasp's, uma delas servirá como Servidor Central, logo, o IP dessa Rasp terá que ser passado como parâmetro de inicialização nos scripts
 
+Nos outros scripts, é necessário passar o parâmetro de qual cruzamento está sendo ativado, e o IP que está sendo executado o Servidor Central
+Possíveis parâmetros de cruzamento:
+```
+cruzamento_1
+cruzamento_2
+cruzamento_3
+cruzamento_4
+```
 
 - **1°**: Executar o Servidor Central
     - No primeiro terminal, na rasp, execute o comando passando o IP :
@@ -62,7 +70,7 @@ python3 servidor_central.py 164.41.98.26
 ```
 
 - **2°**: Executar o primeiro Cruzamento como cliente do Servidor Distribuído
-    - No segundo terminal, na rasp, execute o comando passado os parâmetros 'cruzamento' e 'IP' de onde está rodando o servidor central:
+    - No segundo terminal, na rasp, execute o comando passado os parâmetros 'cruzamento' e 'IP' de onde está rodando o Servidor Central:
 
 ```
 python3 main.py cruzamento_1 IP_rasp_servidor_central
@@ -74,7 +82,7 @@ python3 main.py cruzamento_1 164.41.98.26
 ```
 
 - **3°**: Executar o segundo Cruzamento como cliente do Servidor Distribuído
-    - No terceiro terminal, na rasp, execute o comando passado os parâmetros 'cruzamento' e 'IP' de onde está rodando o servidor central:
+    - No terceiro terminal, na rasp, execute o comando passado os parâmetros 'cruzamento' e 'IP' de onde está rodando o Servidor Central:
 
 ```
 python3 main.py cruzamento_2 IP_rasp_servidor_central
@@ -86,7 +94,7 @@ python3 main.py cruzamento_2 164.41.98.26
 ```
 
 - **4°**: Executar o terceiro Cruzamento como cliente do Servidor Distribuído
-    - No quarto terminal, na rasp, execute o comando passado os parâmetros 'cruzamento' e 'IP' de onde está rodando o servidor central:
+    - No quarto terminal, na rasp, execute o comando passado os parâmetros 'cruzamento' e 'IP' de onde está rodando o Servidor Central:
 
 ```
 python3 main.py cruzamento_3 IP_rasp_servidor_central
@@ -98,7 +106,7 @@ python3 main.py cruzamento_3 164.41.98.26
 ```
 
 - **5°**: Executar o quarto Cruzamento como cliente do Servidor Distribuído
-    - No quinto terminal, na rasp, execute o comando passado os parâmetros 'cruzamento' e 'IP' de onde está rodando o servidor central:
+    - No quinto terminal, na rasp, execute o comando passado os parâmetros 'cruzamento' e 'IP' de onde está rodando o Servidor Central:
 
 ```
 python3 main.py cruzamento_4 IP_rasp_servidor_central
@@ -108,7 +116,7 @@ Exemplo
 ```
 python3 main.py cruzamento_4 164.41.98.26
 ```
-No servidor Central, quando ele é executado, uma lista de interações aparece no terminal, mostrando os comandos:
+No Servidor Central, quando ele é executado, uma lista de interações aparece no terminal, mostrando os comandos:
 
 ```
 1 - Ligar modo de emergencia nos cruzamentos 1 e 2

@@ -41,6 +41,7 @@ PORT = 10191
 try:
     client_socket = socket.socket()
     client_socket.connect((HOST, PORT))
+    client_socket.sendall(str.encode(sys.argv[1]))
 
     def enviar_dados():
         while True:

@@ -20,6 +20,14 @@ dict_dados = {
     'Cruzamento 3': {'Cruzamento': 3, 'Avanco_sinal_vermelho' : 0, 'Acima_velocidade_limite' : 0, 'Media_velocidade' : [0], 'Numero_veiculos' : 0, 'Temporizador' : 0.1},
     'Cruzamento 4': {'Cruzamento': 4, 'Avanco_sinal_vermelho' : 0, 'Acima_velocidade_limite' : 0, 'Media_velocidade' : [0], 'Numero_veiculos' : 0, 'Temporizador' : 0.1}
 }
+
+dict_cruzamentos = {
+    'cruzamento_1': False,
+    'cruzamento_2': False,
+    'cruzamento_3': False,
+    'cruzamento_4': False
+}
+
 tecla_pressionada = False
 
 def recebe_dados_client(conn):
@@ -60,25 +68,25 @@ def envia_dados_client():
             for addr in lista_address:
                 addr.sendall(str.encode(msg))
         elif msg == '1':
-            if len(lista_address) >= 1:
-                lista_address[0].sendall(str.encode(msg))
-            if len(lista_address) >= 2:
-                lista_address[1].sendall(str.encode(msg))
+            if dict_cruzamentos['cruzamento_1']:
+                dict_cruzamentos['cruzamento_1'].sendall(str.encode(msg))
+            if dict_cruzamentos['cruzamento_2']:
+                dict_cruzamentos['cruzamento_2'].sendall(str.encode(msg))
         elif msg == '2':
-            if len(lista_address) >= 1:
-                lista_address[0].sendall(str.encode(msg))
-            if len(lista_address) >= 2:
-                lista_address[1].sendall(str.encode(msg))  
+            if dict_cruzamentos['cruzamento_1']:
+                dict_cruzamentos['cruzamento_1'].sendall(str.encode(msg))
+            if dict_cruzamentos['cruzamento_2']:
+                dict_cruzamentos['cruzamento_2'].sendall(str.encode(msg))  
         elif msg == '3':
-            if len(lista_address) >= 3:
-                lista_address[2].sendall(str.encode(msg))
-            if len(lista_address) >= 4:
-                lista_address[3].sendall(str.encode(msg))
+            if dict_cruzamentos['cruzamento_3']:
+                dict_cruzamentos['cruzamento_3'].sendall(str.encode(msg))
+            if dict_cruzamentos['cruzamento_4']:
+                dict_cruzamentos['cruzamento_4'].sendall(str.encode(msg))
         elif msg == '4':
-            if len(lista_address) >= 3:
-                lista_address[2].sendall(str.encode(msg))
-            if len(lista_address) >= 4:
-                lista_address[3].sendall(str.encode(msg))
+            if dict_cruzamentos['cruzamento_3']:
+                dict_cruzamentos['cruzamento_3'].sendall(str.encode(msg))
+            if dict_cruzamentos['cruzamento_4']:
+                dict_cruzamentos['cruzamento_4'].sendall(str.encode(msg))
         elif msg == '7':
             os.system('cls' if os.name == 'nt' else 'clear')
             mostra_dados_client()
@@ -117,6 +125,7 @@ try:
         conn, addr = server_socket.accept()
         lista_address.append(conn)
         print('\nConexão realizada por:', addr[0] + ':' + str(addr[1]))
+        dict_cruzamentos[conn.recv(1024).decode('utf-8')] = conn
         start_new_thread(recebe_dados_client, (conn,))
 except KeyboardInterrupt:
     print('\nServidor encerrado')
