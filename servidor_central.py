@@ -42,7 +42,6 @@ def recebe_dados_client(conn):
     conn.close()
 
 def envia_dados_client():
-    
     while True:
         print('''Opcoes:
         1 - Ligar modo de emergencia nos cruzamentos 1 e 2
@@ -112,13 +111,13 @@ def mostra_dados_client():
         
 try:
     print('Servidor central iniciado!')
+    thread_envia_dados = Thread(target=envia_dados_client)
+    thread_envia_dados.start()
     while True:
         conn, addr = server_socket.accept()
         lista_address.append(conn)
         print('\nConexão realizada por:', addr[0] + ':' + str(addr[1]))
         start_new_thread(recebe_dados_client, (conn,))
-        thread_envia_dados = Thread(target=envia_dados_client)
-        thread_envia_dados.start()
 except KeyboardInterrupt:
     print('\nServidor encerrado')
     server_socket.close()
