@@ -31,6 +31,7 @@ dict_cruzamentos = {
 tecla_pressionada = False
 
 def recebe_dados_client(conn):
+    '''Funcao que recebe os dados dos clientes'''
     global dict_dados
     conn.send(str.encode('Entrou no servidor central'))
     while True:
@@ -50,6 +51,7 @@ def recebe_dados_client(conn):
     conn.close()
 
 def envia_dados_client():
+    '''Funcao que envia os dados para os clientes'''
     while True:
         print('''Opcoes:
         1 - Ligar modo de emergencia nos cruzamentos 1 e 2
@@ -94,6 +96,7 @@ def envia_dados_client():
 
 
 def verifica_tecla(s):
+    '''Funcao que verifica se a tecla foi pressionada'''
     global tecla_pressionada
     while True:
         if input() == '0':
@@ -101,6 +104,7 @@ def verifica_tecla(s):
             break
 
 def mostra_dados_client():
+    '''Funcao que mostra os dados dos cruzamentos'''
     global dict_dados, tecla_pressionada
     d = start_new_thread(verifica_tecla, ('',))
     print(d)
@@ -119,14 +123,14 @@ def mostra_dados_client():
         
 try:
     print('Servidor central iniciado!')
-    thread_envia_dados = Thread(target=envia_dados_client)
+    thread_envia_dados = Thread(target=envia_dados_client) # Thread que envia os dados para os clientes
     thread_envia_dados.start()
     while True:
         conn, addr = server_socket.accept()
         lista_address.append(conn)
         print('\nConexão realizada por:', addr[0] + ':' + str(addr[1]))
         dict_cruzamentos[conn.recv(1024).decode('utf-8')] = conn
-        start_new_thread(recebe_dados_client, (conn,))
+        start_new_thread(recebe_dados_client, (conn,)) # Thread que recebe os dados dos clientes
 except KeyboardInterrupt:
     print('\nServidor encerrado')
     server_socket.close()

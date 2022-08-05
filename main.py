@@ -44,6 +44,7 @@ try:
     client_socket.sendall(str.encode(sys.argv[1]))
 
     def enviar_dados():
+        '''Funcao que envia informacoes dos cruzamentos para o servidor central'''
         while True:
             tempo_inicial = time.perf_counter()
             sleep(3)
@@ -55,6 +56,7 @@ try:
 
 
     def receber_dados():
+        '''Funcao que recebe os comandos passados no servidor central'''
         while True:
             msg = client_socket.recv(1024)
             msg = msg.decode('utf-8')
@@ -75,13 +77,13 @@ try:
     GPIO.add_event_detect(cruzamento['Velocidade_2_B'], GPIO.BOTH, callback=sensor_velocidade_semaforo_principal)
 
 
-    thread_cruzamento = Thread(target=rotina_semaforo, args=(cruzamento,))
+    thread_cruzamento = Thread(target=rotina_semaforo, args=(cruzamento,)) #Thread que controla o semaforo
     thread_cruzamento.start()
 
-    thread_envia_dados = Thread(target=enviar_dados)
+    thread_envia_dados = Thread(target=enviar_dados) #Thread que envia os dados para o servidor central
     thread_envia_dados.start()
 
-    thread_recebe_dados = Thread(target=receber_dados)
+    thread_recebe_dados = Thread(target=receber_dados) #Thread que recebe os comandos do servidor central
     thread_recebe_dados.start()
 
 

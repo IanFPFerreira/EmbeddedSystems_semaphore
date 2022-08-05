@@ -14,6 +14,7 @@ dict_rotinas = {
 
 
 def verifica_entradas_saidas(semaforo, cruzamento, tempo_sleep=0.5):
+    '''Funcao que monitora as entradas e saidas dos botoes e sensores do cruzamento'''
     global botao_pedestre_principal, botao_pedestre_auxiliar
     global sensor_passagem, verifica_passagem
     global sensor_parada, verifica_parada
@@ -68,6 +69,7 @@ def verifica_entradas_saidas(semaforo, cruzamento, tempo_sleep=0.5):
 
         
 def rotina_semaforo(cruzamento):
+    '''Funcao que executa a rotina do semaforo'''
     global botao_pedestre_principal, botao_pedestre_auxiliar
     global sensor_passagem, verifica_passagem
     global sensor_parada, verifica_parada
@@ -104,6 +106,7 @@ def rotina_semaforo(cruzamento):
 
 
 def rotina_modo_noturno(cruzamento):
+    '''Funcao que executa a rotina do modo noturno'''
     global modo_noturno_ativo
     print('Modo noturno ativado')
     while True:
@@ -116,6 +119,7 @@ def rotina_modo_noturno(cruzamento):
 
 
 def rotina_modo_emergencia(cruzamento):
+    '''Funcao que executa a rotina do modo emergencia'''
     global botao_pedestre_principal, botao_pedestre_auxiliar
     global sensor_passagem, verifica_passagem
     global sensor_parada, verifica_parada
@@ -138,6 +142,7 @@ def rotina_modo_emergencia(cruzamento):
 
 
 def verifica_modo_servidor(modo):
+    '''Funcao que trata o comando passado pelo servidor central'''
     global modo_noturno_ativo, modo_emergencia_ativo
     if modo == '1' or modo == '3':
         modo_emergencia_ativo = True
@@ -150,18 +155,21 @@ def verifica_modo_servidor(modo):
 
 
 def botao_pedestre_semaforo_principal(channel):
+    '''Funcao que trata o botao de pedestre do semaforo principal'''
     global botao_pedestre_principal
     botao_pedestre_principal = True
     print(f"Botao: {channel}")
 
 
 def botao_pedestre_semaforo_auxiliar(channel):
+    '''Funcao que trata o botao de pedestre do semaforo auxiliar'''
     global botao_pedestre_auxiliar
     botao_pedestre_auxiliar = True
     print(f"Botao: {channel}")
 
 
 def sensor_passagem_semaforo_auxiliar(channel):
+    '''Funcao que trata o sensor de passagem do semaforo auxiliar'''
     global sensor_passagem, verifica_passagem
     if GPIO.input(channel):
         sensor_passagem = True
@@ -171,6 +179,7 @@ def sensor_passagem_semaforo_auxiliar(channel):
 
 
 def sensor_velocidade_semaforo_principal(channel):
+    '''Funcao que trata o sensor de velocidade do semaforo principal'''
     global sensor_velocidade, verifica_velocidade, tempo_inicial
     sensor_velocidade = True
     h, m, s = datetime.now().strftime('%H:%M:%S.%f').split(':')
@@ -179,6 +188,7 @@ def sensor_velocidade_semaforo_principal(channel):
 
 
 def sensor_parada_semaforo_principal(channel):
+    '''Funcao que trata o sensor de parada do semaforo principal e o estado final do sensor de velocidade'''
     global sensor_parada, verifica_parada, sensor_velocidade, tempo_inicial, tempo_final
     if not sensor_velocidade:
         sensor_velocidade = False
@@ -208,6 +218,7 @@ def sensor_parada_semaforo_principal(channel):
 
 
 def enviando_informacoes(tempo):
+    '''Funcao que manipula as informacoes que serao enviadas para o servidor central'''
     global infos_servidor_central
     infos_servidor_central['Temporizador'] += tempo
     return infos_servidor_central
